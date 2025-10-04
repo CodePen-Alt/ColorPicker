@@ -1,0 +1,439 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+}
+
+.color-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Color Area */
+.color-area-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.color-area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, 
+        hsl(0, 100%, 50%), 
+        hsl(60, 100%, 50%), 
+        hsl(120, 100%, 50%), 
+        hsl(180, 100%, 50%), 
+        hsl(240, 100%, 50%), 
+        hsl(300, 100%, 50%), 
+        hsl(360, 100%, 50%));
+    cursor: crosshair;
+}
+
+.color-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%);
+}
+
+.color-handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 3px solid white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    top: 50%;
+    left: 70%;
+}
+
+/* Sliders */
+.slider-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.slider-wrapper label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.hue-slider, .opacity-slider {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.hue-slider {
+    background: linear-gradient(to right, 
+        hsl(0, 100%, 50%) 0%, 
+        hsl(60, 100%, 50%) 16.66%, 
+        hsl(120, 100%, 50%) 33.33%, 
+        hsl(180, 100%, 50%) 50%, 
+        hsl(240, 100%, 50%) 66.66%, 
+        hsl(300, 100%, 50%) 83.33%, 
+        hsl(360, 100%, 50%) 100%);
+}
+
+.opacity-slider {
+    background-image: 
+        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
+        linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%, #ccc),
+        linear-gradient(to right, transparent, #dd323c);
+    background-size: 10px 10px, 10px 10px, 100% 100%;
+    background-position: 0 0, 5px 5px, 0 0;
+}
+
+.hue-handle, .opacity-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Color Preview */
+.color-preview {
+    width: 100%;
+    height: 60px;
+    border-radius: 8px;
+    background-color: #dd323c;
+    border: 1px solid #ddd;
+}
+
+/* Contrast Buttons */
+.contrast-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.contrast-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.black-text {
+    background-color: #dd323c;
+    color: black;
+}
+
+.white-text {
+    background-color: #dd323c;
+    color: white;
+}
+
+.contrast-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Contrast Ratio */
+.contrast-ratio {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contrast-ratio .label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.ratio-values {
+    display: flex;
+    gap: 16px;
+}
+
+.ratio-item {
+    font-size: 13px;
+    color: #666;
+}
+
+/* Color Values */
+.color-values {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.value-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.value-group label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px 32px 8px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: monospace;
+}
+
+.copy-btn {
+    position: absolute;
+    right: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 3px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.copy-btn:hover {
+    opacity: 1;
+    background-color: #f0f0f0;
+}
+
+/* Screen Picker */
+.screen-picker {
+    text-align: center;
+}
+
+#screenPickerBtn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+#screenPickerBtn:hover {
+    background-color: #0056b3;
+}
+
+/* Color Harmonies */
+.color-harmonies {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.color-harmonies .label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.harmony-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.harmony-btn {
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.harmony-btn:hover {
+    background-color: #e9ecef;
+    border-color: #bbb;
+}
+
+.harmony-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Palette Management */
+.palette-management {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.palette-management .label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.palette-controls {
+    display: flex;
+    gap: 8px;
+}
+
+#paletteNameInput {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#savePaletteBtn {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+#savePaletteBtn:hover {
+    background-color: #218838;
+}
+
+.palette-actions {
+    display: flex;
+    gap: 8px;
+}
+
+#exportPalettesBtn, #importPalettesBtn {
+    flex: 1;
+    padding: 8px 12px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+#exportPalettesBtn:hover, #importPalettesBtn:hover {
+    background-color: #5a6268;
+}
+
+/* Saved Palettes */
+.saved-palettes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.palette-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+
+.palette-colors {
+    display: flex;
+    gap: 2px;
+}
+
+.palette-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.palette-name {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+}
+
+.palette-delete {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 3px;
+}
+
+.palette-delete:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Harmony Preview */
+.harmony-preview {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.harmony-preview.active {
+    display: grid;
+}
+
+.harmony-color {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.harmony-color:hover {
+    transform: scale(1.05);
+}
