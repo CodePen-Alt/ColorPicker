@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced Color Picker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="picker-card" aria-label="Color picker">
+      <!-- SV Panel -->
+      <div class="sv-wrapper">
+        <div class="sv-panel" id="svPanel" role="application" aria-label="Saturation and brightness selector" tabindex="0">
+          <div class="sv-thumb" id="svThumb" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- Hue Slider -->
+      <div class="label-row">
+        <label for="hueRange">Hue</label>
+      </div>
+      <div class="slider hue">
+        <div class="slider-track" id="hueTrack"></div>
+        <input id="hueRange" type="range" min="0" max="360" step="1" aria-label="Hue" />
+      </div>
+
+      <!-- Opacity Slider -->
+      <div class="label-row">
+        <label for="alphaRange">Opacity</label>
+      </div>
+      <div class="slider alpha">
+        <div class="slider-track checkerboard" id="alphaTrack"></div>
+        <div class="slider-track overlay" id="alphaOverlay"></div>
+        <input id="alphaRange" type="range" min="0" max="100" step="1" aria-label="Opacity" />
+      </div>
+
+      <!-- Large Preview -->
+      <div class="preview-large" id="previewLarge" aria-label="Selected color preview"></div>
+
+      <!-- Text Previews -->
+      <div class="preview-text-row">
+        <div class="preview-text" id="previewOnBlack"><span>Black Text</span></div>
+        <div class="preview-text" id="previewOnWhite"><span>White Text</span></div>
+      </div>
+
+      <!-- Contrast -->
+      <div class="contrast-row">
+        <div class="contrast-title">Contrast Ratio</div>
+        <div class="contrast-badges">
+          <div class="contrast-item">
+            <span class="muted">vs Black</span>
+            <span class="badge" id="contrastBlack">—</span>
+          </div>
+          <div class="contrast-item">
+            <span class="muted">vs White</span>
+            <span class="badge" id="contrastWhite">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="inputs-grid">
+        <div class="input-card">
+          <label for="hexInput">HEX</label>
+          <div class="copy-row">
+            <input id="hexInput" type="text" value="#DD3C3C" />
+            <button class="icon-btn" id="copyHex" title="Copy HEX" aria-label="Copy HEX">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v12h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="input-card">
+          <label for="rgbInput">RGB</label>
+          <div class="copy-row">
+            <input id="rgbInput" type="text" value="221, 60, 60" />
+            <button class="icon-btn" id="copyRgb" title="Copy RGB" aria-label="Copy RGB">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v12h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="input-card">
+          <label for="hslInput">HSL</label>
+          <div class="copy-row">
+            <input id="hslInput" type="text" value="0, 70%, 55%" />
+            <button class="icon-btn" id="copyHsl" title="Copy HSL" aria-label="Copy HSL">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v12h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eyedropper -->
+      <div class="eyedropper-row">
+        <button id="eyedropperBtn" class="btn ghost">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M19.73 7.23l-.96.96-2.96-2.96.96-.96a2.1 2.1 0 012.96 0 2.1 2.1 0 010 2.96zM4 17.59V21h3.41l9.65-9.65-3.41-3.41L4 17.59z"/></svg>
+          <span>Pick from Screen</span>
+        </button>
+      </div>
+
+      <!-- Harmonies -->
+      <div class="harmonies">
+        <div class="section-title">Color Harmonies</div>
+        <div class="harmony-buttons">
+          <button class="tag" data-harmony="complementary">Complementary</button>
+          <button class="tag" data-harmony="analogous">Analogous</button>
+          <button class="tag" data-harmony="triadic">Triadic</button>
+          <button class="tag" data-harmony="tetradic">Tetradic</button>
+        </div>
+        <div class="harmony-swatches" id="harmonySwatches" hidden></div>
+      </div>
+
+      <!-- Save Palette -->
+      <div class="save-row">
+        <div class="save-controls">
+          <label for="paletteName">Save Palette</label>
+          <input id="paletteName" type="text" placeholder="Palette name" />
+        </div>
+        <button id="savePalette" class="btn primary">Save</button>
+      </div>
+
+      <div class="io-row">
+        <button id="exportPalettes" class="btn soft">Export Palettes</button>
+        <input type="file" id="importFile" accept="application/json" hidden />
+        <button id="importPalettes" class="btn soft">Import Palettes</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="color-utils.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
