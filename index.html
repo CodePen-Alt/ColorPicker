@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Color Picker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="color-picker">
+            <!-- Main Color Picker Area -->
+            <div class="color-area-wrapper">
+                <div class="color-area" id="colorArea">
+                    <div class="color-overlay"></div>
+                    <div class="color-handle" id="colorHandle"></div>
+                </div>
+            </div>
+
+            <!-- Hue Slider -->
+            <div class="slider-wrapper">
+                <label>Hue</label>
+                <div class="hue-slider" id="hueSlider">
+                    <div class="hue-handle" id="hueHandle"></div>
+                </div>
+            </div>
+
+            <!-- Opacity Slider -->
+            <div class="slider-wrapper">
+                <label>Opacity</label>
+                <div class="opacity-slider" id="opacitySlider">
+                    <div class="opacity-handle" id="opacityHandle"></div>
+                </div>
+            </div>
+
+            <!-- Color Preview -->
+            <div class="color-preview" id="colorPreview"></div>
+
+            <!-- Contrast Test Buttons -->
+            <div class="contrast-buttons">
+                <button class="contrast-btn black-text" id="blackTextBtn">Black Text</button>
+                <button class="contrast-btn white-text" id="whiteTextBtn">White Text</button>
+            </div>
+
+            <!-- Contrast Ratio -->
+            <div class="contrast-ratio">
+                <span class="label">Contrast Ratio</span>
+                <div class="ratio-values">
+                    <span class="ratio-item">vs Black: <span id="blackRatio">4.9:1 AA</span></span>
+                    <span class="ratio-item">vs White: <span id="whiteRatio">4.9:1 Fail</span></span>
+                </div>
+            </div>
+
+            <!-- Color Values -->
+            <div class="color-values">
+                <div class="value-group">
+                    <label>HEX</label>
+                    <div class="input-group">
+                        <input type="text" id="hexInput" value="#003C3C">
+                        <button class="copy-btn" data-target="hexInput">📋</button>
+                    </div>
+                </div>
+                <div class="value-group">
+                    <label>RGB</label>
+                    <div class="input-group">
+                        <input type="text" id="rgbInput" value="221, 50, 60">
+                        <button class="copy-btn" data-target="rgbInput">📋</button>
+                    </div>
+                </div>
+                <div class="value-group">
+                    <label>HSL</label>
+                    <div class="input-group">
+                        <input type="text" id="hslInput" value="0, 70%, 53%">
+                        <button class="copy-btn" data-target="hslInput">📋</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pick from Screen -->
+            <div class="screen-picker">
+                <button id="screenPickerBtn">🎯 Pick from Screen</button>
+            </div>
+
+            <!-- Color Harmonies -->
+            <div class="color-harmonies">
+                <span class="label">Color Harmonies</span>
+                <div class="harmony-buttons">
+                    <button class="harmony-btn" data-type="complementary">Complementary</button>
+                    <button class="harmony-btn" data-type="analogous">Analogous</button>
+                    <button class="harmony-btn" data-type="triadic">Triadic</button>
+                    <button class="harmony-btn" data-type="tetradic">Tetradic</button>
+                </div>
+            </div>
+
+            <!-- Palette Management -->
+            <div class="palette-management">
+                <span class="label">Save Palette</span>
+                <div class="palette-controls">
+                    <input type="text" id="paletteNameInput" placeholder="Palette name">
+                    <button id="savePaletteBtn">Save</button>
+                </div>
+                <div class="palette-actions">
+                    <button id="exportPalettesBtn">Export Palettes</button>
+                    <button id="importPalettesBtn">Import Palettes</button>
+                </div>
+            </div>
+
+            <!-- Saved Palettes Display -->
+            <div class="saved-palettes" id="savedPalettes"></div>
+
+            <!-- Color Harmony Preview -->
+            <div class="harmony-preview" id="harmonyPreview"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
