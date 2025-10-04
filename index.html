@@ -3,114 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Color Picker</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Color Picker Tool</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+<!-- 
+    REPLIT COLOR PICKER TOOL
+    ========================
+    Files:
+    - index.html: Main HTML structure
+    - styles.css: All styling with CSS variables for theming at top
+    - script.js: Vanilla JavaScript functionality
+    
+    To run on Replit:
+    1. Create a new HTML/CSS/JS repl
+    2. Copy these three files
+    3. Run - the page will open with full functionality
+    
+    Theme customization:
+    - Edit CSS variables at top of styles.css
+    - Change primary/accent colors, spacing, border radius
+    
+    Features included:
+    - Visual color picker with hue/saturation/lightness sliders
+    - Live color format inputs (Hex, RGB, HSL)
+    - Copy-to-clipboard functionality
+    - EyeDropper API support with fallback
+    - Contrast checker with WCAG compliance
+    - Color harmony generation
+    - Palette save/load/export system
+    - Light/dark theme toggle
+    - Full keyboard accessibility
+    - Mobile-optimized touch interactions
+-->
 <body>
     <div class="container">
-        <div class="color-picker">
-            <!-- Main Color Picker Area -->
-            <div class="color-area-wrapper">
-                <div class="color-area" id="colorArea">
-                    <div class="color-overlay"></div>
-                    <div class="color-handle" id="colorHandle"></div>
-                </div>
-            </div>
+        <header class="header">
+            <h1>Color Picker</h1>
+            <button class="theme-toggle" aria-label="Toggle theme">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </header>
 
-            <!-- Hue Slider -->
-            <div class="slider-wrapper">
-                <label>Hue</label>
-                <div class="hue-slider" id="hueSlider">
-                    <div class="hue-handle" id="hueHandle"></div>
-                </div>
-            </div>
-
-            <!-- Opacity Slider -->
-            <div class="slider-wrapper">
-                <label>Opacity</label>
-                <div class="opacity-slider" id="opacitySlider">
-                    <div class="opacity-handle" id="opacityHandle"></div>
-                </div>
-            </div>
-
-            <!-- Color Preview -->
-            <div class="color-preview" id="colorPreview"></div>
-
-            <!-- Contrast Test Buttons -->
-            <div class="contrast-buttons">
-                <button class="contrast-btn black-text" id="blackTextBtn">Black Text</button>
-                <button class="contrast-btn white-text" id="whiteTextBtn">White Text</button>
-            </div>
-
-            <!-- Contrast Ratio -->
-            <div class="contrast-ratio">
-                <span class="label">Contrast Ratio</span>
-                <div class="ratio-values">
-                    <span class="ratio-item">vs Black: <span id="blackRatio">4.9:1 AA</span></span>
-                    <span class="ratio-item">vs White: <span id="whiteRatio">4.9:1 Fail</span></span>
-                </div>
-            </div>
-
-            <!-- Color Values -->
-            <div class="color-values">
-                <div class="value-group">
-                    <label>HEX</label>
-                    <div class="input-group">
-                        <input type="text" id="hexInput" value="#003C3C">
-                        <button class="copy-btn" data-target="hexInput">📋</button>
+        <main class="main-content">
+            <!-- Color Picker Section -->
+            <section class="picker-section">
+                <h2 class="section-title">Pick a Color</h2>
+                
+                <!-- Color Display -->
+                <div class="color-preview">
+                    <div class="color-swatch" id="colorSwatch" role="img" aria-label="Selected color preview"></div>
+                    <div class="preview-info">
+                        <div class="contrast-demos">
+                            <div class="contrast-demo contrast-white" id="contrastWhite">
+                                <span>Aa</span>
+                            </div>
+                            <div class="contrast-demo contrast-black" id="contrastBlack">
+                                <span>Aa</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="value-group">
-                    <label>RGB</label>
-                    <div class="input-group">
-                        <input type="text" id="rgbInput" value="221, 50, 60">
-                        <button class="copy-btn" data-target="rgbInput">📋</button>
+
+                <!-- Visual Picker -->
+                <div class="visual-picker">
+                    <div class="color-field-container">
+                        <canvas class="color-field" id="colorField" width="280" height="200" role="slider" 
+                                aria-label="Color saturation and lightness picker" tabindex="0"></canvas>
+                        <div class="field-cursor" id="fieldCursor"></div>
+                    </div>
+                    
+                    <div class="sliders-container">
+                        <div class="slider-group">
+                            <label for="hueSlider">Hue</label>
+                            <input type="range" id="hueSlider" class="slider hue-slider" 
+                                   min="0" max="360" value="258" aria-label="Hue slider">
+                        </div>
+                        
+                        <div class="slider-group">
+                            <label for="alphaSlider">Opacity</label>
+                            <input type="range" id="alphaSlider" class="slider alpha-slider" 
+                                   min="0" max="1" step="0.01" value="1" aria-label="Alpha/opacity slider">
+                        </div>
                     </div>
                 </div>
-                <div class="value-group">
-                    <label>HSL</label>
+
+                <!-- EyeDropper Button -->
+                <div class="eyedropper-section">
+                    <button class="eyedropper-btn" id="eyedropperBtn" aria-label="Pick color from screen">
+                        <span class="eyedropper-icon">🎯</span>
+                        Pick from Screen
+                    </button>
+                    <small class="eyedropper-note" id="eyedropperNote"></small>
+                </div>
+            </section>
+
+            <!-- Color Values Section -->
+            <section class="values-section">
+                <h2 class="section-title">Color Values</h2>
+                
+                <div class="color-inputs">
                     <div class="input-group">
-                        <input type="text" id="hslInput" value="0, 70%, 53%">
-                        <button class="copy-btn" data-target="hslInput">📋</button>
+                        <label for="hexInput">HEX</label>
+                        <div class="input-with-copy">
+                            <input type="text" id="hexInput" class="color-input" value="#4F46E5" 
+                                   pattern="^#[0-9A-Fa-f]{6}$" aria-label="Hexadecimal color value">
+                            <button class="copy-btn" data-format="hex" aria-label="Copy hex value">📋</button>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="rgbInputs">RGB</label>
+                        <div class="rgb-inputs">
+                            <input type="number" id="rgbR" class="color-input rgb-input" 
+                                   min="0" max="255" value="79" aria-label="Red value">
+                            <input type="number" id="rgbG" class="color-input rgb-input" 
+                                   min="0" max="255" value="70" aria-label="Green value">
+                            <input type="number" id="rgbB" class="color-input rgb-input" 
+                                   min="0" max="255" value="229" aria-label="Blue value">
+                            <button class="copy-btn" data-format="rgb" aria-label="Copy RGB value">📋</button>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="hslInputs">HSL</label>
+                        <div class="hsl-inputs">
+                            <input type="number" id="hslH" class="color-input hsl-input" 
+                                   min="0" max="360" value="258" aria-label="Hue value">
+                            <input type="number" id="hslS" class="color-input hsl-input" 
+                                   min="0" max="100" value="76" aria-label="Saturation value">
+                            <input type="number" id="hslL" class="color-input hsl-input" 
+                                   min="0" max="100" value="59" aria-label="Lightness value">
+                            <button class="copy-btn" data-format="hsl" aria-label="Copy HSL value">📋</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Pick from Screen -->
-            <div class="screen-picker">
-                <button id="screenPickerBtn">🎯 Pick from Screen</button>
-            </div>
+            <!-- Contrast Checker Section -->
+            <section class="contrast-section">
+                <h2 class="section-title">Accessibility</h2>
+                
+                <div class="contrast-info">
+                    <div class="contrast-ratios">
+                        <div class="contrast-ratio">
+                            <span class="ratio-label">vs White:</span>
+                            <span class="ratio-value" id="whiteRatio">4.5:1</span>
+                            <span class="wcag-badge" id="whiteWcag">AA</span>
+                        </div>
+                        <div class="contrast-ratio">
+                            <span class="ratio-label">vs Black:</span>
+                            <span class="ratio-value" id="blackRatio">4.6:1</span>
+                            <span class="wcag-badge" id="blackWcag">AA</span>
+                        </div>
+                    </div>
+                    
+                    <div class="wcag-info">
+                        <small>
+                            <strong>WCAG Guidelines:</strong> AA (4.5:1 normal text, 3:1 large text) | 
+                            AAA (7:1 normal text, 4.5:1 large text)
+                        </small>
+                    </div>
+                </div>
+            </section>
 
-            <!-- Color Harmonies -->
-            <div class="color-harmonies">
-                <span class="label">Color Harmonies</span>
-                <div class="harmony-buttons">
+            <!-- Color Harmonies Section -->
+            <section class="harmonies-section">
+                <h2 class="section-title">Color Harmonies</h2>
+                
+                <div class="harmony-controls">
                     <button class="harmony-btn" data-type="complementary">Complementary</button>
                     <button class="harmony-btn" data-type="analogous">Analogous</button>
                     <button class="harmony-btn" data-type="triadic">Triadic</button>
                     <button class="harmony-btn" data-type="tetradic">Tetradic</button>
                 </div>
-            </div>
+                
+                <div class="harmony-preview" id="harmonyPreview" role="region" aria-label="Color harmony swatches">
+                    <p class="harmony-prompt">Select a harmony type above to generate colors</p>
+                </div>
+            </section>
 
-            <!-- Palette Management -->
-            <div class="palette-management">
-                <span class="label">Save Palette</span>
+            <!-- Palettes Section -->
+            <section class="palettes-section">
+                <h2 class="section-title">Saved Palettes</h2>
+                
                 <div class="palette-controls">
-                    <input type="text" id="paletteNameInput" placeholder="Palette name">
-                    <button id="savePaletteBtn">Save</button>
+                    <div class="save-palette">
+                        <input type="text" id="paletteNameInput" class="palette-input" 
+                               placeholder="Palette name" aria-label="Palette name">
+                        <button class="save-palette-btn" id="savePaletteBtn">Save Current</button>
+                    </div>
+                    
+                    <div class="palette-actions">
+                        <button class="import-palette-btn" id="importPaletteBtn">Import</button>
+                        <button class="export-palettes-btn" id="exportPalettesBtn">Export All</button>
+                        <input type="file" id="importPaletteFile" accept=".json" style="display: none;">
+                    </div>
                 </div>
-                <div class="palette-actions">
-                    <button id="exportPalettesBtn">Export Palettes</button>
-                    <button id="importPalettesBtn">Import Palettes</button>
+                
+                <div class="saved-palettes" id="savedPalettes" role="region" aria-label="Saved color palettes">
+                    <p class="no-palettes">No saved palettes yet. Create one above!</p>
                 </div>
-            </div>
+            </section>
+        </main>
 
-            <!-- Saved Palettes Display -->
-            <div class="saved-palettes" id="savedPalettes"></div>
-
-            <!-- Color Harmony Preview -->
-            <div class="harmony-preview" id="harmonyPreview"></div>
-        </div>
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer" role="region" aria-live="polite" aria-label="Notifications"></div>
     </div>
 
     <script src="script.js"></script>
